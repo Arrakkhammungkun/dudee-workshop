@@ -1,4 +1,3 @@
-// hooks/useLocalStorage.ts
 import { useSyncExternalStore, useRef, useCallback } from "react";
 
 export default function useLocalStorage<T>(

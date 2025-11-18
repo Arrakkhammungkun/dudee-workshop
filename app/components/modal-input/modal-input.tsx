@@ -7,13 +7,14 @@ export default function ModalInput({
   name,
   note,
   start_date,
-  end_date,
   Meeting_room,
   onChange,
   onClick,
   label,
   isOpen,
   onClose,
+  start_time,
+  end_time,
 
 }: ModalInputProps) {
 
@@ -45,11 +46,18 @@ export default function ModalInput({
             onChange={(e) => onChange?.("start_date", e.target.value)}
         />
         <FormInput
-            type="date"
-            label="end date"
-            value={end_date ?? ""}
-            onChange={(e) => onChange?.("end_date", e.target.value)}
+            type="time"
+            label="sart time"
+            value={start_time ?? ""}
+            onChange={(e) => onChange?.("start_time", e.target.value)}
         />
+        <FormInput
+            type="time"
+            label="end time"
+            value={end_time ?? ""}
+            onChange={(e) => onChange?.("end_time", e.target.value)}
+        />
+
         <div className="flex justify-end">
             <button
                 onClick={onClick ?? (() => {})}

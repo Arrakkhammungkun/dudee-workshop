@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import "./globals.css";
+import Navbar from "./components/Navbar/Navbar";
 
 interface LayoutProps {
    children:ReactNode;
@@ -10,8 +11,9 @@ export default function RootLayout({
 }: Readonly<LayoutProps>) {
   return (
     <html lang="en">
-      <body>
-       {children}
+    <body>
+      <Navbar />
+          {children}     
       </body>
     </html>
   );

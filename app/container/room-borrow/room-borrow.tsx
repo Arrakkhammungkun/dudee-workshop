@@ -3,13 +3,13 @@
 import { useState } from "react";
 import ModalInput from "@/app/components/modal-input";
 import useRoomBorrow from "@/hooks/useRoomBorrow";
-
+import RoomBorrowList from "@/app/components/room-borrow-list";
 export default function RoomBorrow() {
   const [open, setOpen] = useState(false);
-  const { form, current, handleChange, handleAdd } = useRoomBorrow();
+  const { form, current, handleChange, handleAdd ,handleDelete} = useRoomBorrow();
 
-  return (
-    <div className="p-6">
+  return (  
+    <div className="p-6 bg-[#F4EFEF]">
       <div className="flex justify-center">
         <button
           onClick={() => setOpen(true)}
@@ -26,26 +26,17 @@ export default function RoomBorrow() {
         note={current.note ?? ""}
         Meeting_room={current.meeting_room}
         start_date={current.start_date}
-        end_date={current.end_date}
+        start_time={current.start_time}
+        end_time={current.end_time}
         onChange={handleChange}
         onClick={() => {
           handleAdd();
           setOpen(false);
         }}
-        label="สร้างห้อง"
+        
+        label="จองห้องประชุม"
       />
-
-      <div className="mt-6">
-        <h2 className="font-medium text-lg">รายการจองห้อง</h2>
-        {form.map((item, index) => (
-          <div key={index} className="border p-2 rounded mb-2">
-            <p>ชื่อ: {item.name}</p>
-            <p>หมายเหตุ: {item.note}</p>
-            <p>ห้อง: {item.meeting_room}</p>
-            <p>วันที่: {item.start_date} - {item.end_date}</p>
-          </div>
-        ))}
-      </div>
+      <RoomBorrowList onClickDelete={handleDelete} form={form}/>
     </div>
   );
 }

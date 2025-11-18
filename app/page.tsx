@@ -1,11 +1,11 @@
 import "server-only";  //ต้องใส่ทุกpage 
-import TodoScreen from "@/app/screens/todo-screen";
+import RoomList from "./container/room-list";
 
 export default function Home() {
   return (
     <div >
       <div className="">
-       <TodoScreen />
+        <RoomList/>
       </div>
     </div>
   );
