@@ -21,7 +21,7 @@ export default function RoomBookingList() {
   
   return (
     <div className="p-4 container mx-auto flex flex-col">
-      <div className="" >
+      <div className="mt-12" >
         <div className="flex justify-end">
 
         </div>

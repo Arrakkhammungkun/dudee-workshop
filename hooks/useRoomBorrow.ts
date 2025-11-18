@@ -12,36 +12,33 @@ const emptyRoom: RoomBorrowType = {
   meeting_room: "",
 };
 
-export default function useRoomBorrow(onEditStart?: () => void) {
+export default function useRoomBorrow(onEdit?: () => void) {
   const [form, setForm] = useLocalStorage<RoomBorrowType[]>("roomBorrowList", []);
-
   const [nextId, setNextId] = useState(1);
-
   const [current, setCurrent] = useState<RoomBorrowType>(emptyRoom);
-
-  const resetCurrent = useCallback(() => {
-    setCurrent(emptyRoom);
-  }, []);
+  const [isEditing, setIsEditing] = useState(false); 
 
   const handleChange = useCallback((field: string, value: string) => {
     setCurrent((prev) => ({ ...prev, [field]: value }));
   }, []);
 
   const handleAdd = useCallback(() => {
-    setForm((prev) => {
-      if (current.id === 0) {
-        const newItem = { ...current, id: nextId };
-        setNextId((prev) => prev + 1);
-        return [...prev, newItem];
-      } else {
-        return prev.map((item) =>
-          item.id === current.id ? { ...current } : item
-        );
-      }
-    });
+    const newItem = { ...current, id: nextId };
+    setForm((prev) => [...prev, newItem]);
+    setNextId((prev) => prev + 1);
+    setCurrent(emptyRoom);
+    setIsEditing(false);
+  }, [current, nextId, setForm]);
 
-    resetCurrent();
-  }, [current, nextId, setForm, resetCurrent]);
+  const handleUpdate = useCallback(() => {
+    if (!current.id) return;
+
+    setForm((prev) =>
+      prev.map((item) => (item.id === current.id ? current : item))
+    );
+    setCurrent(emptyRoom);
+    setIsEditing(false);
+  }, [current, setForm]);
 
   const handleDelete = useCallback(
     (id: number) => {
@@ -52,13 +49,14 @@ export default function useRoomBorrow(onEditStart?: () => void) {
 
   const handleEdit = useCallback(
     (id: number) => {
-      const item = form.find((i) => i.id === id);
-      if (item) {
-        setCurrent(item);
-        onEditStart?.(); // 🟦 สั่งเปิด modal
+      const found = form.find((i) => i.id === id);
+      if (found) {
+        setCurrent(found);
+        setIsEditing(true);      
+        onEdit?.();              
       }
     },
-    [form, onEditStart]
+    [form, onEdit]
   );
 
   return {
@@ -66,8 +64,10 @@ export default function useRoomBorrow(onEditStart?: () => void) {
     current,
     handleChange,
     handleAdd,
-    setCurrent,
+    handleUpdate,    
     handleDelete,
     handleEdit,
+    setCurrent,
+    isEditing,       
   };
 }

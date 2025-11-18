@@ -6,17 +6,19 @@ import useRoomBorrow from "@/hooks/useRoomBorrow";
 import RoomBorrowList from "@/app/components/room-borrow-list";
 export default function RoomBorrow() {
   const [open, setOpen] = useState(false);
-  const { form, current, handleChange, handleAdd ,handleDelete} = useRoomBorrow();
+  const { form, 
+    current, 
+    handleChange, 
+    handleAdd ,
+    handleDelete,
+    handleUpdate,
+    isEditing,
+    handleEdit
+  } = useRoomBorrow(() => setOpen(true));
 
   return (  
     <div className="p-6 bg-[#F4EFEF]">
       <div className="flex justify-center">
-        <button
-          onClick={() => setOpen(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-        >
-          Add
-        </button>
       </div>
 
       <ModalInput
@@ -30,13 +32,17 @@ export default function RoomBorrow() {
         end_time={current.end_time}
         onChange={handleChange}
         onClick={() => {
-          handleAdd();
+          if (isEditing) {
+            handleUpdate();   
+          } else {
+            handleAdd();      
+          }
           setOpen(false);
         }}
         
-        label="จองห้องประชุม"
+        label={isEditing ? "แก้ไขการจอง" : "จองห้องประชุม"}
       />
-      <RoomBorrowList onClickDelete={handleDelete} form={form}/>
+      <RoomBorrowList onClickDelete={handleDelete} form={form} onClickEdit={handleEdit}/>
     </div>
   );
 }
