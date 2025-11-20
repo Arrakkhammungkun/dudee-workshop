@@ -1,8 +1,10 @@
-// rfce
 import React from "react";
+import dayjs from "dayjs";
 import type { ModalInputProps } from "./type";
 import FormInput from "../button-input";
 import Modal from "../modal/modal";
+import MyDateTimePicker from "../MyDateTimePicker/MyDateTimePicker";
+
 export default function ModalInput({
   name,
   note,
@@ -15,63 +17,82 @@ export default function ModalInput({
   onClose,
   start_time,
   end_time,
-
+  end_date,
 }: ModalInputProps) {
+  React.useEffect(() => {
+    if (start_date && !end_date) {
+      onChange?.("end_date", start_date);
+    }
+  }, [start_date, end_date, onChange]);
 
+  const startValue = start_date && start_time ? `${start_date}T${start_time}` : "";
+
+  const endValue = React.useMemo(() => {
+    if (end_date && end_time) return `${end_date}T${end_time}`;
+    if (start_date && start_time) {
+      const [h, m] = start_time.split(":");
+      const endHour = (parseInt(h, 10) + 1) % 24;
+      return `${start_date}T${String(endHour).padStart(2, "0")}:${m}`;
+    }
+    return "";
+  }, [end_date, end_time, start_date, start_time]);
+
+const minDateTimeForEnd = React.useMemo(() => {
+  if (!start_date || !start_time) return undefined;
+
+ 
+  if (!end_date) {
+    return dayjs(`${start_date}T${start_time}`);
+  }
+
+   if (end_date === start_date) {
+    return dayjs(`${start_date}T${start_time}`);
+  }
+
+   return dayjs(`${end_date}T00:00`);
+}, [start_date, start_time, end_date]);
 
   return (
-    <div >
-       <Modal isOpen={isOpen} onClose={onClose} >
-        <h1>{label}</h1>
-        <FormInput
-            label="Name"
-            value={name}
-            onChange={(e) => onChange?.("name", e.target.value)}
-            placeholder="Enter your name"
-        />
-        <FormInput
-            label="Note"
-            value={note ?? ""}
-            onChange={(e) => onChange?.("note", e.target.value)}/>
+    <div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <h1 className="text-xl font-semibold mb-4">{label}</h1>
 
-        <FormInput
-            label="Meeting room"
-            value={Meeting_room ?? ""}
-            onChange={(e) => onChange?.("meeting_room", e.target.value)}
-        />
-        <FormInput
-            type="date"
-            label="start date"
-            value={start_date ?? ""}
-            onChange={(e) => onChange?.("start_date", e.target.value)}
-        />
-        <FormInput
-            type="time"
-            label="sart time"
-            value={start_time ?? ""}
-            onChange={(e) => onChange?.("start_time", e.target.value)}
-        />
-        <FormInput
-            type="time"
-            label="end time"
-            value={end_time ?? ""}
-            onChange={(e) => onChange?.("end_time", e.target.value)}
-        />
+        <FormInput label="ชื่อ-สกุล" value={name || ""} onChange={(e) => onChange?.("name", e.target.value)} placeholder="กรอกชื่อผู้จอง" />
+        <FormInput label="หมายเหตุ" value={note ?? ""} onChange={(e) => onChange?.("note", e.target.value)} />
+        <FormInput label="ห้องประชุม" value={Meeting_room ?? ""} onChange={(e) => onChange?.("meeting_room", e.target.value)} />
 
-        <div className="flex justify-end">
-            <button
-                onClick={onClick ?? (() => {})}
-                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg "
-            >
-                จอง
-            </button>
+        {/* START */}
+        <div className="mt-4">
+          <MyDateTimePicker
+            label="วันและเวลาเริ่มต้น"
+            value={startValue}
+            onChange={(val) => {
+              const [date, time] = val.split("T");
+              onChange?.("start_date", date);
+              onChange?.("start_time", time);
+            }}
+          />
         </div>
 
-       </Modal>
+         <div className="mt-4">
+          <MyDateTimePicker
+            label="วันและเวลาสิ้นสุด"
+            value={endValue}
+            minDateTime={minDateTimeForEnd}
+            onChange={(val) => {
+              const [date, time] = val.split("T");
+              onChange?.("end_date", date);
+              onChange?.("end_time", time);
+            }}
+          />
+        </div>
 
-
+        <div className="flex justify-end mt-6">
+          <button onClick={onClick} className="px-8 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition font-medium">
+            จองห้องประชุม
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
-
- 

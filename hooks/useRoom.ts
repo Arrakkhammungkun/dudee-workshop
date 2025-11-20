@@ -27,6 +27,7 @@ export default function useRoom() {
     start_date: "",
     start_time: "",
     end_time: "",
+    end_date: "",
   });
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [bookings, setBookings] = useLocalStorage<RoomBorrowType[]>("roomBorrowList", []);
@@ -100,6 +101,7 @@ export default function useRoom() {
       start_date: "",
       start_time: "",
       end_time: "",
+      end_date: "",
     });
     setBookingModalOpen(false);
   }, [bookingCurrent, nextBookingId, setBookings]);

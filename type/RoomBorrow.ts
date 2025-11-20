@@ -6,4 +6,5 @@ export type RoomBorrowType = {
   meeting_room: string;
   start_time: string;
   end_time: string;
+  end_date: string;
 }

@@ -36,6 +36,7 @@ export default function RoomBookingList() {
         start_date={bookingCurrent.start_date ?? ""}
         start_time={bookingCurrent.start_time ?? ""}
         end_time={bookingCurrent.end_time ?? ""}
+        end_date={bookingCurrent.end_date ?? ""}
         onChange={handleBookingChange}
         onClick={handleSubmitBooking}
         label="จองห้องประชุม"

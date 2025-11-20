@@ -1,11 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { MenuItem } from "./type";
 
-interface MenuItem {
-  name: string;
-  href: string;
-}
 
 const mainMenu: MenuItem[] = [
   { name: "Room booking", href: "/room-booking" },

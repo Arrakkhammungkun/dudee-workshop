@@ -10,6 +10,7 @@ const emptyRoom: RoomBorrowType = {
   end_time: "",
   start_time: "",
   meeting_room: "",
+  end_date: "",
 };
 
 export default function useRoomBorrow(onEdit?: () => void) {

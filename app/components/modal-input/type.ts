@@ -12,5 +12,6 @@ export interface ModalInputProps{
     isOpen: boolean;
     start_time:string;
     end_time:string;
-
+    end_date?: string;
+    
 }

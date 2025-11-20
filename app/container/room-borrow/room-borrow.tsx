@@ -17,7 +17,7 @@ export default function RoomBorrow() {
   } = useRoomBorrow(() => setOpen(true));
 
   return (  
-    <div className="p-6 bg-[#F4EFEF]">
+    <div className="p-6 bg-[#F8F9FA] h-screen ">
       <div className="flex justify-center">
       </div>
 
@@ -31,6 +31,7 @@ export default function RoomBorrow() {
         start_time={current.start_time}
         end_time={current.end_time}
         onChange={handleChange}
+        end_date={current.end_date ?? ""}
         onClick={() => {
           if (isEditing) {
             handleUpdate();   
